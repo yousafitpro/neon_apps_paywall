@@ -18,8 +18,10 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::group(['middleware'=>'api_key'],function(){
+    Route::post("createPaywall",[PayWallController::class,'createPaywall']);
+    Route::post("updatePaywall",[PayWallController::class,'updatePaywall']);
+    Route::get("deletePaywall",[PayWallController::class,'deletePaywall']);
+    Route::get("getPaywall",[PayWallController::class,'getPaywall']);
+});
 
-Route::post("createPaywall",[PayWallController::class,'createPaywall']);
-Route::post("updatePaywall",[PayWallController::class,'updatePaywall']);
-Route::get("deletePaywall",[PayWallController::class,'deletePaywall']);
-Route::get("getPaywall",[PayWallController::class,'getPaywall']);
