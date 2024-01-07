@@ -8,16 +8,39 @@
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
-                    {{ __('You are logged in!') }}
+                    <table id="yourDataTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>API Key</th>
+                                <th>JSON</th>
+
+                                <!-- Add more columns as needed -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($list as $item)
+                            <tr>
+                                <td>{{$item->custom_id}}</td>
+                                <td>{{$item->api_key}}</td>
+                                <td>
+                                    <textarea style="height: 100px;color:green; background-color:black">{{$item->json}}</textarea>
+                                </td>
+                                <!-- Add more rows and data as needed -->
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#yourDataTable').DataTable(); // Replace 'yourDataTable' with the actual ID of your table
+    });
+</script>
 @endsection
