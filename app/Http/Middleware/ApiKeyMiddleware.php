@@ -16,7 +16,10 @@ class ApiKeyMiddleware
     public function handle(Request $request, Closure $next): Response
     {
 
-
+        if(!$request->has('api_key') || $request->api_key==null || empty($request->api_key))
+        {
+            return response()->json(['status'=>'error','errors'=>["API KEY is required."]]);
+        }
         return $next($request);
     }
 }
