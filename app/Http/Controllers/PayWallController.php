@@ -30,7 +30,7 @@ class PayWallController extends Controller
                 'custom_id'=>$input['id'],
                 'api_key'=>$input['api_key']
             ]);
-            return response()->json(['status'=>'success','id'=>$paywall->custom_id]);
+            return response()->json(['status'=>'success']);
         }
         catch(\Exception $e)
         {
