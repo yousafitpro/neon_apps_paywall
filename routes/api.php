@@ -23,5 +23,6 @@ Route::group(['middleware'=>'api_key'],function(){
     Route::post("updatePaywall",[PayWallController::class,'updatePaywall']);
     Route::get("deletePaywall",[PayWallController::class,'deletePaywall']);
     Route::get("getPaywall",[PayWallController::class,'getPaywall']);
+    Route::get("getPaywalls",[PayWallController::class,'getPaywalls']);
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PaywallsResource;
 use App\Models\Paywall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -28,6 +29,7 @@ class PayWallController extends Controller
             $paywall=Paywall::create([
                 'json'=>json_encode($input['json']),
                 'custom_id'=>$input['id'],
+                'appID'=>$input['appID'],
                 'api_key'=>$input['api_key']
             ]);
             return response()->json(['status'=>'success']);
@@ -46,8 +48,9 @@ class PayWallController extends Controller
         }
         try{
             $input=$request->all();
-            $paywall=Paywall::where('custom_id',$input['id'])->where('api_key',$request->api_key)->update([
-                'json'=>json_encode($input['json'])
+            $paywall=Paywall::updateOrCreate(['custom_id'=>$input['id'],'api_key'=>$request->api_key],[
+                'json'=>json_encode($input['json']),
+                'appID'=>$input['appID']
             ]);
             return response()->json(['status'=>'success']);
         }
@@ -67,6 +70,19 @@ class PayWallController extends Controller
 
             $paywall=Paywall::where('custom_id',$input['id'])->where('api_key',$request->api_key)->get()->first();
             return response()->json(['json'=>json_decode($paywall['json'])]);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['status'=>'error','message'=>"Operation Failed"]);
+        }
+    }
+    public function getPaywalls(Request $request)
+    {
+        try{
+            $input=$request->all();
+
+            $paywall=Paywall::where('api_key',$request->api_key)->orderBy('updated_at', 'DESC')->get();
+            return  PaywallsResource::collection($paywall);
         }
         catch(\Exception $e)
         {

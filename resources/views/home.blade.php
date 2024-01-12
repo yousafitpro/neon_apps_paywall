@@ -14,6 +14,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>API Key</th>
+                                <th>AppID</th>
                                 <th>JSON</th>
 
                                 <!-- Add more columns as needed -->
@@ -24,6 +25,7 @@
                             <tr>
                                 <td>{{$item->custom_id}}</td>
                                 <td>{{$item->api_key}}</td>
+                                <td>{{$item->appID}}</td>
                                 <td>
                                     <textarea style="height: 100px;color:green; background-color:black">{{$item->json}}</textarea>
                                 </td>
@@ -40,7 +42,9 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('#yourDataTable').DataTable(); // Replace 'yourDataTable' with the actual ID of your table
+        $('#yourDataTable').DataTable({
+            order:[]
+        }); // Replace 'yourDataTable' with the actual ID of your table
     });
 </script>
 @endsection

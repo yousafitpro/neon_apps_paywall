@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data['list']=Paywall::all();
+        $data['list']=Paywall::orderBy('updated_at', 'DESC')->get();
         return view('home',$data);
     }
 }
