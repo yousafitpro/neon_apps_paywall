@@ -82,7 +82,10 @@ class PayWallController extends Controller
             $input=$request->all();
 
             $paywall=Paywall::where('api_key',$request->api_key)->orderBy('updated_at', 'DESC')->get();
-            return  PaywallsResource::collection($paywall);
+            return  response()->json([
+                'status' =>'success',
+                'paywalls'=>PaywallsResource::collection($paywall)
+            ]);
         }
         catch(\Exception $e)
         {
