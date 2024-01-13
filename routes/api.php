@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::group(['middleware'=>'api_key'],function(){
-    Route::post("createPaywall",[PayWallController::class,'createPaywall']);
-    Route::post("updatePaywall",[PayWallController::class,'updatePaywall']);
-    Route::get("deletePaywall",[PayWallController::class,'deletePaywall']);
-    Route::get("getPaywall",[PayWallController::class,'getPaywall']);
-    Route::get("getPaywalls",[PayWallController::class,'getPaywalls']);
+    Route::any("createPaywall",[PayWallController::class,'createPaywall']);
+    Route::any("updatePaywall",[PayWallController::class,'updatePaywall']);
+    Route::any("deletePaywall",[PayWallController::class,'deletePaywall']);
+    Route::any("getPaywall",[PayWallController::class,'getPaywall']);
+    Route::any("getPaywalls",[PayWallController::class,'getPaywalls']);
 });
 
