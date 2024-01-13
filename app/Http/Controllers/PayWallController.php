@@ -50,7 +50,8 @@ class PayWallController extends Controller
             $input=$request->all();
             $paywall=Paywall::updateOrCreate(['custom_id'=>$input['id'],'api_key'=>$request->api_key],[
                 'json'=>json_encode($input['json']),
-                'appID'=>$input['appID']
+                'appID'=>$input['appID'],
+                'updated_at'=>Now()
             ]);
             return response()->json(['status'=>'success']);
         }
