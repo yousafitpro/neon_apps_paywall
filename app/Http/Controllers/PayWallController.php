@@ -69,7 +69,7 @@ class PayWallController extends Controller
             }
 
             $paywall=Paywall::where('custom_id',$input['id'])->where('deleted_at',null)->where('api_key',$request->api_key)->get()->first();
-            return response()->json(['json'=>json_decode($paywall['json'])]);
+            return response()->json(['status' =>'success','json'=>json_decode($paywall['json'])]);
         }
         catch(\Exception $e)
         {
