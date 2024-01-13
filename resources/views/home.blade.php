@@ -16,6 +16,8 @@
                                 <th>API Key</th>
                                 <th>AppID</th>
                                 <th>JSON</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
 
                                 <!-- Add more columns as needed -->
                             </tr>
@@ -29,7 +31,10 @@
                                 <td>
                                     <textarea style="height: 100px;color:green; background-color:black">{{$item->json}}</textarea>
                                 </td>
-                                <!-- Add more rows and data as needed -->
+                                <td>{{$item->updated_at}}</td>
+                                <td>
+                                    <a onclick="return confirm('Are you sure?')" href="{{route('paywall.delete',$item->id)}}" style="background-color: darkred;color:white;padding:10px;border-radius:10px">Delete</a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

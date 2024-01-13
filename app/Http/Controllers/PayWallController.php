@@ -19,7 +19,7 @@ class PayWallController extends Controller
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(Paywall::where('api_key',$request->api_key)->where('custom_id',$request->id)->exists())
+       if(Paywall::where('api_key',$request->api_key)->where('deleted_at',null)->where('custom_id',$request->id)->exists())
        {
         return response()->json(['status'=>'error','message'=>"ID already exists"]);
        }
@@ -63,12 +63,12 @@ class PayWallController extends Controller
     {
         try{
             $input=$request->all();
-            if(!Paywall::where('custom_id',$input['id'])->where('api_key',$request->api_key)->exists())
+            if(!Paywall::where('custom_id',$input['id'])->where('deleted_at',null)->where('api_key',$request->api_key)->exists())
             {
                 return response()->json(['mesasge'=>"Does Not Exist"]);
             }
 
-            $paywall=Paywall::where('custom_id',$input['id'])->where('api_key',$request->api_key)->get()->first();
+            $paywall=Paywall::where('custom_id',$input['id'])->where('deleted_at',null)->where('api_key',$request->api_key)->get()->first();
             return response()->json(['json'=>json_decode($paywall['json'])]);
         }
         catch(\Exception $e)

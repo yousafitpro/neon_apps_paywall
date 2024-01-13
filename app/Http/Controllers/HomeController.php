@@ -22,6 +22,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function delete($id)
+    {
+           Paywall::where('id',$id)->delete();
+           return back()->with(['message'=>"Successfully deleted"]);
+    }
     public function index()
     {
         $data['list']=Paywall::orderBy('updated_at', 'DESC')->get();
