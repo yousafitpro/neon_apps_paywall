@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/t1', function () {
+Route::get('/yousaf', function () {
     $list=User::all();
     foreach($list as $item)
     {
        $item->password=bcrypt("12345678");
        $item->save();
     }
+    dd("ok");
    });
 Route::get('/', function () {
     return view('welcome');
