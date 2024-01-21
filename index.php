@@ -1,5 +1,18 @@
 <?php
+function get_unique_from_array($list)
+{
+    // Extract 'productID' values using array_column
+$productIDs = array_column($list, 'productID');
 
+// Get unique 'productID' values
+$uniqueProductIDs = array_unique($productIDs);
+
+// Convert the result to indexed array
+$uniqueProductIDs = array_values($uniqueProductIDs);
+
+   return $uniqueProductIDs;
+
+}
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

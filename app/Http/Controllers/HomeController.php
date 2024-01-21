@@ -128,6 +128,126 @@ class HomeController extends Controller
 
         return view('apps',$data);
     }
+    public function paywall_details($api_key,$app_id,$paywall_id)
+    {
+
+          $data['products']=Paywall::query()->where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id
+        ])
+        ->orderBy('updated_at', 'DESC')
+        ->get()->toArray();
+        $main_list=[];
+        $new_list=[];
+        foreach(get_unique_from_array($data['products']) as $item)
+        {
+            $new_list['product_id']=$item;
+            $new_list['total_count']=Paywall::where([
+                'api_key'=>$api_key,
+                'appID'=>$app_id,
+                'custom_id'=>$paywall_id,
+                'productID'=>$item
+            ])->get()->count();
+            $new_list['renewal']=Paywall::where([
+                'api_key'=>$api_key,
+                'appID'=>$app_id,
+                'custom_id'=>$paywall_id,
+                'productID'=>$item,
+                'type'=>'renewal'
+            ])->get()->count();
+            $new_list['trialStarted']=Paywall::where([
+                'api_key'=>$api_key,
+                'appID'=>$app_id,
+                'custom_id'=>$paywall_id,
+                'productID'=>$item,
+                'type'=>'trialStarted'
+            ])->get()->count();
+            $new_list['trialConverted']=Paywall::where([
+                'api_key'=>$api_key,
+                'appID'=>$app_id,
+                'custom_id'=>$paywall_id,
+                'productID'=>$item,
+                'type'=>'trialConverted'
+            ])->get()->count();
+
+            $new_list['initialPurchase']=Paywall::where([
+                'type'=>'initialPurchase',
+                'api_key'=>$api_key,
+                'appID'=>$app_id,
+                'custom_id'=>$paywall_id,
+                'productID'=>$item
+            ])->get()->count();
+          $main_list[]=$new_list;
+          $new_list=[];
+        }
+        $top1['total_count']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id
+        ])->get()->count();
+        $top1['renewal_count']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id,
+            'type'=>'renewal'
+        ])->get()->count();
+        $top1['trialStarted_count']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id,
+            'type'=>'trialStarted'
+        ])->get()->count();
+        $top1['trialConverted_count']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id,
+            'type'=>'trialConverted'
+        ])->get()->count();
+
+        $top1['initialPurchase_count']=Paywall::where([
+            'type'=>'initialPurchase',
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id
+        ])->get()->count();
+
+        $top2['renewal_amount']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id,
+            'type'=>'renewal'
+        ])->sum('amount');
+        $top2['trialStarted_amount']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id,
+            'type'=>'trialStarted'
+        ])->sum('amount');
+        $top2['trialConverted_amount']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id,
+            'type'=>'trialConverted'
+        ])->sum('amount');
+
+        $top2['initialPurchase_amount']=Paywall::where([
+            'type'=>'initialPurchase',
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id
+        ])->sum('amount');
+
+        $data['products']=$main_list;
+        $data['top1']=$top1;
+        $data['top2']=$top2;
+        $data['paywall']=Paywall::where([
+            'api_key'=>$api_key,
+            'appID'=>$app_id,
+            'custom_id'=>$paywall_id
+        ])->get()->first();
+        return view('detail',$data);
+    }
     public function paywalls($id,$app_id)
     {
         $data['list'] = Paywall::whereIn('id', function ($query) {
@@ -188,4 +308,7 @@ class HomeController extends Controller
 
         return view('paywalls',$data);
     }
+
+
+
 }
