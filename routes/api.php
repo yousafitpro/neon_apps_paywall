@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::group(['middleware'=>'api_key'],function(){
     Route::any("createPaywall",[PayWallController::class,'createPaywall']);
+    Route::any("logConversion",[PayWallController::class,'logConversion']);
+    Route::any("logPaywallView",[PayWallController::class,'logPaywallView']);
+    Route::any("logSession",[PayWallController::class,'logSession']);
     Route::any("updatePaywall",[PayWallController::class,'updatePaywall']);
     Route::any("deletePaywall",[PayWallController::class,'deletePaywall']);
     Route::any("getPaywall",[PayWallController::class,'getPaywall']);
