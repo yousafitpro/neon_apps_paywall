@@ -29,3 +29,6 @@ Route::group(['middleware'=>'api_key'],function(){
     Route::any("getPaywalls",[PayWallController::class,'getPaywalls']);
 });
 
+
+
+    Route::any("getTemplate",[PayWallController::class,'getTemplate']);
