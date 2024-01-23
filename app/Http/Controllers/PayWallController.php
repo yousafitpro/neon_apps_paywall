@@ -46,7 +46,6 @@ class PayWallController extends Controller
        $validator= Validator::make($request->all(),[
         'api_key'=>'required',
         'userID'=>'required',
-        'appID'=>'required',
         'productID'=>'required',
         'type'=>'required',
         'paywall_id'=>'required',
@@ -55,8 +54,7 @@ class PayWallController extends Controller
         'json'=>'required'
     ],[
         'userID.required'=>"User ID is Required",
-        'productID.required'=>"Product ID is Required",
-        'appID.required'=>"App ID is Required",
+        'productID.required'=>"Product ID is Required"
     ]);
        if($validator->fails())
        {
