@@ -71,15 +71,20 @@ class PayWallController extends Controller
         'date'=>$request->date
         ])->exists())
        {
-        return response()->json(['status'=>'error','message'=>"ID already exists"]);
+        return response()->json(['status'=>'error','message'=>"Already exists"]);
        }
 
         try{
+            $first=Paywall::where('deleted_at',null)->where([
+                'api_key'=>$request->api_key,
+                'userID'=>$request->userID,
+                'custom_id'=>$request->paywall_id
+                ])->get()->first();
             $input=$request->all();
             $paywall=Paywall::create([
                 'api_key'=>$request->api_key,
                 'userID'=>$request->userID,
-                'appID'=>$request->appID,
+                'appID'=>$first!=null?$first->appID:null,
                 'productID'=>$request->productID,
                 'type'=>$request->type,
                 'custom_id'=>$request->paywall_id,
