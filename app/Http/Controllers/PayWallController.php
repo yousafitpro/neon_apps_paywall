@@ -131,22 +131,23 @@ class PayWallController extends Controller
         {
             return response()->json(['status'=>'error','message'=>"Operation Failed"]);
         }
-    }    public function getTemplate(Request $request)
+    }
+     public function getTemplate(Request $request)
     {
-        try{
+        // try{
             $input=$request->all();
-            if(!Paywall::where('custom_id',$input['paywall_id'])->where('deleted_at',null)->exists())
+            if(!Paywall::where('custom_id',$input['id'])->where('deleted_at',null)->exists())
             {
                 return response()->json(['mesasge'=>"Does Not Exist"]);
             }
 
-            $paywall=Paywall::where('custom_id',$input['paywall_id'])->where('deleted_at',null)->get()->first();
+            $paywall=Paywall::where('custom_id',$input['id'])->where('deleted_at',null)->get()->first();
             return response()->json(['status' =>'success','json'=>json_decode($paywall['json'])]);
-        }
-        catch(\Exception $e)
-        {
-            return response()->json(['status'=>'error','message'=>"Operation Failed"]);
-        }
+        // }
+        // catch(\Exception $e)
+        // {
+        //     return response()->json(['status'=>'error','message'=>"Operation Failed"]);
+        // }
     }
     public function logPaywallView(Request $request)
     {
