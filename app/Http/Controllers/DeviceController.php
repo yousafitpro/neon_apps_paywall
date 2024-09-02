@@ -19,16 +19,16 @@ class DeviceController extends Controller
        $validator= Validator::make($request->all(),[
         'device_id'=>'required',
         'bundle_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox'],
         'app_name'=>'required',
-        'idfa'=>'required',
         'device_model'=>'required',
-        'created_at'=>'required'
+        'created_at'=>['required', 'date_format:m/d/Y H:i:s']
     ]);
        if($validator->fails())
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->exists())
+       if(Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
        {
         return response()->json(['status'=>'success','message'=>'Record already exists'],200);
        }
@@ -41,18 +41,19 @@ class DeviceController extends Controller
 
        $validator= Validator::make($request->all(),[
         'device_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox'],
         'bundle_id'=>'required'
     ]);
        if($validator->fails())
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(!Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->exists())
+       if(!Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
        {
         return response()->json(['status'=>'error','message'=>'Record does not exist'],404);
        }
        $data=$request->except('_token');
-       Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->update($data);
+       Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->update($data);
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
     }
     public function trial_start(Request $request)
@@ -60,18 +61,19 @@ class DeviceController extends Controller
 
        $validator= Validator::make($request->all(),[
         'device_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox'],
         'bundle_id'=>'required'
     ]);
        if($validator->fails())
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(!Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->exists())
+       if(!Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
        {
         return response()->json(['status'=>'error','message'=>'Record does not exist'],404);
        }
        $data=$request->except('_token');
-       Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->update(
+       Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->update(
         ['is_trial_started'=>'true']
        );
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
@@ -81,18 +83,19 @@ class DeviceController extends Controller
 
        $validator= Validator::make($request->all(),[
         'device_id'=>'required',
-        'bundle_id'=>'required'
+        'bundle_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox']
     ]);
        if($validator->fails())
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(!Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->exists())
+       if(!Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
        {
         return response()->json(['status'=>'error','message'=>'Record does not exist'],404);
        }
        $data=$request->except('_token');
-       Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->update(
+       Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->update(
         ['is_trial_converted'=>'true']
        );
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
@@ -102,18 +105,19 @@ class DeviceController extends Controller
 
        $validator= Validator::make($request->all(),[
         'device_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox'],
         'bundle_id'=>'required'
     ]);
        if($validator->fails())
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(!Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->exists())
+       if(!Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
        {
         return response()->json(['status'=>'error','message'=>'Record does not exist'],404);
        }
        $data=$request->except('_token');
-       Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->update(
+       Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->update(
         ['is_directly_subscribed'=>'true']
        );
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
@@ -123,18 +127,19 @@ class DeviceController extends Controller
 
        $validator= Validator::make($request->all(),[
         'device_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox'],
         'bundle_id'=>'required'
     ]);
        if($validator->fails())
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(!Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->exists())
+       if(!Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
        {
         return response()->json(['status'=>'error','message'=>'Record does not exist'],404);
        }
        $data=$request->except('_token');
-       Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->update(
+       Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->update(
         ['is_paywall_viewed'=>'true']
        );
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
@@ -145,18 +150,19 @@ class DeviceController extends Controller
 
        $validator= Validator::make($request->all(),[
         'device_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox'],
         'bundle_id'=>'required'
     ]);
        if($validator->fails())
        {
         return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
        }
-       if(!Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->exists())
+       if(!Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
        {
         return response()->json(['status'=>'error','message'=>'Record does not exist'],404);
        }
        $data=$request->except('_token');
-       Device::where(['device_id'=>$request->device_id,'bundle_id'=>$request->bundle_id])->update(
+       Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->update(
         ['is_onboarding_completed'=>'true']
        );
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
