@@ -144,8 +144,7 @@ class DeviceController extends Controller
        );
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
     }
-    public
-     function onboarding_completion(Request $request)
+    public function onboarding_completion(Request $request)
     {
 
        $validator= Validator::make($request->all(),[
@@ -165,6 +164,28 @@ class DeviceController extends Controller
        Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->update(
         ['is_onboarding_completed'=>'true']
        );
+       return response()->json(['status'=>'success','message'=>'Record Updated'],200);
+    }
+    public function track_session(Request $request)
+    {
+
+       $validator= Validator::make($request->all(),[
+        'device_id'=>'required',
+        'environment' => ['required', 'in:Production,Sandbox'],
+        'bundle_id'=>'required'
+    ]);
+       if($validator->fails())
+       {
+        return response()->json(['status'=>'error','errors'=>$validator->errors()->all()]);
+       }
+       if(!Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->exists())
+       {
+        return response()->json(['status'=>'error','message'=>'Record does not exist'],404);
+       }
+       $data=$request->except('_token');
+       $item=Device::where(['device_id'=>$request->device_id,'environment'=>$request->environment,'bundle_id'=>$request->bundle_id])->first();
+       $item->session_count=$item->session_count+1;
+       $item->save();
        return response()->json(['status'=>'success','message'=>'Record Updated'],200);
     }
 }

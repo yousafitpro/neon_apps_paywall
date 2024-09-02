@@ -26,6 +26,7 @@ Route::group(['prefix'=>'v1/devices'],function(){
 });
 Route::group(['prefix'=>'v1/events'],function(){
     Route::post("trial-start",[DeviceController::class,'trial_start']);
+    Route::post("track-Session",[DeviceController::class,'track_session']);
     Route::post("trial-conversion",[DeviceController::class,'trial_conversion']);
     Route::post("direct-subscription",[DeviceController::class,'direct_subscription']);
     Route::post("paywall-view",[DeviceController::class,'paywall_view']);
