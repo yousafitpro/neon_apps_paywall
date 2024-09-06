@@ -3,6 +3,7 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -21,13 +22,61 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Scripts -->
     {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
+
+    <style>
+            .btn_back{
+        color: white !important;
+        font-size: 14px;
+        border-radius: 10px;
+        background-color: #25272A;
+        padding: 10px;
+        margin-right: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .table_card{
+        background-color: #25272A;
+    }
+    .table_card td,th{
+        color: white !important;
+    }
+    .table_card .dataTables_info{
+        color: white !important;
+    }
+    .table_card .dataTables_length{
+        color: white !important;
+    }
+    .table_card select[name="yourDataTable_length"] {
+        color: white !important;
+    }
+    .table_card #yourDataTable_filter{
+        color: white !important;
+    }
+    .table_card td{
+        background-color: #25272A;
+    }
+    .mcard{
+        margin-top: 10px;
+        background-color: #25272A;
+        width: 100%;
+        min-height: 100px;
+        border-radius: 20px;
+        padding: 8px;
+    }
+    .mcard label{
+        color: #809FB8
+    }
+    .mcard small{
+        color: white
+    }
+        </style>
 </head>
-<body>
+<body class="bg-black" style="background-color: black">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                   Paywall
+                   Data Platform
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -72,6 +121,11 @@
         </main>
     </div>
 
-
+<script>
+    function redirect_me(url)
+    {
+        window.location.href=url;
+    }
+    </script>
 </body>
 </html>

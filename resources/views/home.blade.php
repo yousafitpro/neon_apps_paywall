@@ -1,57 +1,116 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">Accounts</div>
-
-                <div class="card-body" style="overflow: auto">
-
-                    <table id="yourDataTable">
-                        <thead>
-                            <tr>
-                                <th>Accounts</th>
-                                <th>Session Count</th>
-                                <th>Paywall View Count</th>
-                                <th>renewal</th>
-                                <th>trialStarted</th>
-                                <th>trialConverted</th>
-                                <th>Paywall Count</th>
-                                <th>initialPurchase</th>
-                                <th>Actions</th>
-
-                                <!-- Add more columns as needed -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($list as $item)
-                            <tr class="tbl_row">
-                                <td>{{$item->api_key}}</td>
-                                <td>{{$item->session_count}}</td>
-                                <td>{{$item->paywall_view_count}}</td>
-                                <td>{{$item->renewal}}</td>
-                                <td>{{$item->trialStarted}}</td>
-                                <td>{{$item->trialConverted}}</td>
-                                <td>{{$item->paywall_count}}</td>
-                                <td>{{$item->initialPurchase}}</td>
-                                <td>
-                                    <br>
-                                    <a class="btn btn-primary btn-block"  href="{{route('apps',$item->api_key)}}" style="padding:10px;border-radius:10px">Apps</a>
-                                    <br>
-                                    <br>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
+<style>
+    .mcard{
+        margin-top: 10px;
+        background-color: #25272A;
+        width: 100%;
+        min-height: 100px;
+        border-radius: 20px;
+        padding: 8px;
+    }
+    .mcard label{
+        color: #809FB8
+    }
+    .mcard small{
+        color: white
+    }
+    </style>
+<div class="container" >
+    <div class="row">
+        <div class="col-md-3">
+            <div class="mcard" style="border-radius: 10px" >
+                <div class="mcardbody">
+                    <h4 style="color: white">
+                        {{$total_apps}}
+                    </h3>
+                    <label>Total Apps</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mcard" style="border-radius: 10px" >
+                <div class="mcardbody">
+                    <h4 style="color: white">
+                        {{$total_devices}}
+                    </h3>
+                    <label>Total Devices</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mcard" style="border-radius: 10px" >
+                <div class="mcardbody">
+                    <h4 style="color: white">
+                        456.456
+                    </h3>
+                    <label>Total Users</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mcard" style="border-radius: 10px" >
+                <div class="mcardbody">
+                    <h4 style="color: white">
+                        967.456
+                    </h3>
+                    <label>Total Events</label>
                 </div>
             </div>
         </div>
     </div>
+    <br>
+    <h4 style="color: white">All Apps</h4>
+    @foreach ($list as $item)
+
+    <a href="{{url('items')}}/{{$item->bundle_id}}?type=devices">
+        <div class="row" style="cursor: pointer">
+            <div class="col-md-12">
+                <div class="mcard" >
+                    <div class="mcardbody">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 style="color: white">
+
+                                </h3>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Bundle ID</label><br>
+                                <small>{{$item->info->bundle_id}}</small>
+                            </div>
+                            <div class="col-md-1">
+                                <label>App ID</label><br>
+                                <small>{{$item->info->device_id}}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Onboarding Completion Rate</label><br>
+                                <small>%{{$item->onboarding}}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Trial Start Rate</label><br>
+                                <small>%{{$item->trial_started}}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Trial Converted</label><br>
+                                <small>%{{$item->trial_converted}}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Direct Subscription Rate</label><br>
+                                <small>%{{$item->directly_subscribed}}</small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+    @endforeach
+
 </div>
 <script>
     $(document).ready(function() {

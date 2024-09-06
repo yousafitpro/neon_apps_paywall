@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Device;
-use App\Models\DeviceEvent;
 use App\Models\Paywall;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -32,117 +29,50 @@ class HomeController extends Controller
     }
     public function index()
     {
-
-        $data['total_devices'] = Device::distinct('device_id')
-        ->count('device_id');
-        $data['total_apps'] = Device::distinct('app_name')
-        ->count('app_name');
-        $data['list'] = Device::select('bundle_id', DB::raw('MAX(id) as id'))
-        ->groupBy('bundle_id')
+        $data['list'] = Paywall::whereIn('id', function ($query) {
+            $query->select(\DB::raw('MAX(id)'))
+                ->from('paywalls')
+                ->groupBy('api_key');
+        })
+        ->orderBy('updated_at', 'DESC')
         ->get();
-
         foreach($data['list'] as $item)
         {
-            $item->info=Device::where('bundle_id',$item->bundle_id)->first();
+            $item->id=$item->id;
+            $item->session_count=Paywall::where([
+                'api_key'=>$item->api_key,
+                'userID'=>$item->userID,
+                'appID'=>$item->appID,
+            ])->get()->count();
+            $item->paywall_view_count=Paywall::where([
+                'api_key'=>$item->api_key,
+                'userID'=>$item->userID,
+                'appID'=>$item->appID,
+                'custom_id'=>$item->paywall_id,
+            ])->get()->count();
+            $item->paywall_count=Paywall::where([
+                'custom_id'=>$item->paywall_id,
+            ])->get()->count();
 
+            $item->trialStarted=Paywall::where([
+                'type'=>'trialStarted',
+            ])->get()->count();
 
-            $total=Device::where('bundle_id',$item->bundle_id)->get()->count();
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_onboarding_completed','true')->get()->count();
-            $item->onboarding=($gained/$total)*100;
+            $item->trialConverted=Paywall::where([
+                'type'=>'trialConverted',
+            ])->get()->count();
 
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_started','true')->get()->count();
-            $item->trial_started=($gained/$total)*100;
+            $item->initialPurchase=Paywall::where([
+                'type'=>'initialPurchase',
+            ])->get()->count();
 
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_directly_subscribed','true')->get()->count();
-            $item->directly_subscribed=($gained/$total)*100;
-
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_converted','true')->get()->count();
-            $item->trial_converted=($gained/$total)*100;
-
+            $item->renewal=Paywall::where([
+                'type'=>'renewal',
+            ])->get()->count();
         }
         return view('home',$data);
     }
-    public function items($bundle_id)
-    {
-
-
-        $data['list'] = Device::where('bundle_id',$bundle_id)
-        ->take(1)->get();
-        $data['devices'] = Device::where('bundle_id',$bundle_id)
-        ->get();
-        $data['events'] = DeviceEvent::where('bundle_id',$bundle_id)
-        ->get();
-
-        foreach($data['list'] as $item)
-        {
-            $item->info=Device::where('bundle_id',$item->bundle_id)->first();
-
-
-            $total=Device::where('bundle_id',$item->bundle_id)->get()->count();
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_onboarding_completed','true')->get()->count();
-            $item->onboarding=($gained/$total)*100;
-
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_started','true')->get()->count();
-            $item->trial_started=($gained/$total)*100;
-
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_directly_subscribed','true')->get()->count();
-            $item->directly_subscribed=($gained/$total)*100;
-
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_converted','true')->get()->count();
-            $item->trial_converted=($gained/$total)*100;
-
-        }
-        if(request('type')=="devices")
-        {
-
-            return view('devices',$data);
-        }
-        if(request('type')=="events")
-        {
-            return view('events',$data);
-        }
-    }
-    public function events($bundle_id)
-    {
-
-        $data['total_devices'] = Device::distinct('device_id')
-        ->count('device_id');
-        $data['total_apps'] = Device::distinct('app_name')
-        ->count('app_name');
-        $data['list'] = Device::select('bundle_id', DB::raw('MAX(id) as id'))
-        ->groupBy('bundle_id')
-        ->get();
-
-        foreach($data['list'] as $item)
-        {
-            $item->info=Device::where('bundle_id',$item->bundle_id)->first();
-
-
-            $total=Device::where('bundle_id',$item->bundle_id)->get()->count();
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_onboarding_completed','true')->get()->count();
-            $item->onboarding=($gained/$total)*100;
-
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_started','true')->get()->count();
-            $item->trial_started=($gained/$total)*100;
-
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_directly_subscribed','true')->get()->count();
-            $item->directly_subscribed=($gained/$total)*100;
-
-            $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_converted','true')->get()->count();
-            $item->trial_converted=($gained/$total)*100;
-
-        }
-        if(request('type')=="devies")
-        {
-            dd("ok");
-            return view('devices',$data);
-        }
-        if(request('type')=="events")
-        {
-            return view('events',$data);
-        }
-
-    }    public function apps($id)
+    public function apps($id)
     {
         $data['list'] = Paywall::whereIn('id', function ($query) {
             $query->select(\DB::raw('MAX(id)'))
