@@ -63,7 +63,7 @@
     <br>
    <div style="height: 50px;width:100%">
     <h4 style="color: white;float:left;"><a href="{{url('home')}}"><span class="btn_back"><i class="fa-solid fa-list"></i></span></a>All Apps</h4>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
+    {{-- <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
 
         <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
           <input type="radio" name="options" id="option1" autocomplete="off" checked> Export
@@ -72,7 +72,7 @@
           <input type="radio" name="options" id="option3" autocomplete="off">
           <i class="fa-solid fa-filter"></i>
         </label>
-      </div>
+      </div> --}}
    </div>
     @foreach ($list as $item)
 

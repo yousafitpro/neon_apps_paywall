@@ -61,21 +61,35 @@
 
 
                 <div class="card-body" style="overflow: auto">
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <?php
-                            $url1='items/'.request('bundle_id').'?type=devices';
-                            $url2='items/'.request('bundle_id').'?type=events';
-                            ?>
-                        <label style="cursor: pointer" onclick="redirect_me('{{url($url1)}}')" class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
-                          <input type="radio" name="options" id="option1" autocomplete="off" checked> Devices
-                        </label>
-                        <label style="cursor: pointer" onclick="redirect_me('{{url($url2)}}')" class="btn btn-secondary {{request('type')=='events'?'active':''}}">
-                          <input type="radio" name="options" id="option3" autocomplete="off"> Events
-                        </label>
-                      </div>
-                      <br>
-                      <br>
-                    <table id="yourDataTable">
+                    <div style="width:100%">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: left">
+                            <?php
+                                $url1='items/'.request('bundle_id').'?type=devices';
+                                $url2='items/'.request('bundle_id').'?type=events';
+                                ?>
+                            <label style="cursor: pointer" onclick="redirect_me('{{url($url1)}}')" class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
+                              <input type="radio" name="options" id="option1" autocomplete="off" checked> Devices
+                            </label>
+                            <label style="cursor: pointer" onclick="redirect_me('{{url($url2)}}')" class="btn btn-secondary {{request('type')=='events'?'active':''}}">
+                              <input type="radio" name="options" id="option3" autocomplete="off"> Events
+                            </label>
+                          </div>
+                          <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
+
+                            <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
+                              <input type="radio" name="options" id="option1" autocomplete="off" checked> Export
+                            </label>
+                            <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='events'?'active':''}}">
+                              <input type="radio" name="options" id="option3" autocomplete="off">
+                              <i class="fa-solid fa-filter"></i>
+                            </label>
+                          </div>
+                        </div>
+
+                          <br>
+                          <br>
+                          <br>
+                          <table id="yourDataTable">
                         <thead>
                             <tr>
                                 <th>Sr</th>
