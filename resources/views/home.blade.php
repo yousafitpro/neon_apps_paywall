@@ -72,7 +72,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h5 style="color: white">
-
+                                  {{$item->info->app_name}}
                                 </h3>
 
                             </div>
