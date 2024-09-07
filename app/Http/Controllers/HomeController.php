@@ -40,6 +40,7 @@ class HomeController extends Controller
         $data['list'] = Device::select('bundle_id', DB::raw('MAX(id) as id'))
         ->groupBy('bundle_id')
         ->get();
+        $data['total_events_count'] = DeviceEvent::query()->get()->count();
 
         foreach($data['list'] as $item)
         {

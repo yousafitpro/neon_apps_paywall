@@ -53,7 +53,7 @@
             <div class="mcard" style="border-radius: 10px" >
                 <div class="mcardbody">
                     <h4 style="color: white">
-                        967.456
+                        {{$total_events_count}}
                     </h3>
                     <label>Total Events</label>
                 </div>
