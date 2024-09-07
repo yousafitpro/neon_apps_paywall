@@ -28,7 +28,7 @@
                             </div>
                             <div class="col-md-1">
                                 <label>App ID</label><br>
-                                <small>{{$item->info->device_id}}</small>
+                                <small>{{$item->info->app_id}}</small>
                             </div>
                             <div class="col-md-2">
                                 <label>Onboarding Completion Rate</label><br>
