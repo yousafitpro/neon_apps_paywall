@@ -61,7 +61,7 @@
         </div>
     </div>
     <br>
-    <h4 style="color: white">All Apps</h4>
+    <h4 style="color: white"><a href="{{url('home')}}"><span class="btn_back"><i class="fa-solid fa-list"></i></span></a>All Apps</h4>
     @foreach ($list as $item)
 
     <a href="{{url('items')}}/{{$item->bundle_id}}?type=devices">
