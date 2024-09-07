@@ -64,14 +64,11 @@
    <div style="height: 50px;width:100%">
     <h4 style="color: white;float:left;"><a href="{{url('home')}}"><span class="btn_back"><i class="fa-solid fa-list"></i></span></a>All Apps</h4>
     <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
-        <?php
-            $url1='items/'.request('bundle_id').'?type=devices';
-            $url2='items/'.request('bundle_id').'?type=events';
-            ?>
-        <label style="cursor: pointer" onclick="redirect_me('{{url($url1)}}')" class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
+
+        <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
           <input type="radio" name="options" id="option1" autocomplete="off" checked> Export
         </label>
-        <label style="cursor: pointer" onclick="redirect_me('{{url($url2)}}')" class="btn btn-secondary {{request('type')=='events'?'active':''}}">
+        <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='events'?'active':''}}">
           <input type="radio" name="options" id="option3" autocomplete="off">
           <i class="fa-solid fa-filter"></i>
         </label>
