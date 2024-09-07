@@ -94,13 +94,17 @@
                                 <label>Trial Start Rate</label><br>
                                 <small>%{{$item->trial_started}}</small>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <label>Trial Converted</label><br>
                                 <small>%{{$item->trial_converted}}</small>
                             </div>
                             <div class="col-md-2">
                                 <label>Direct Subscription Rate</label><br>
                                 <small>%{{$item->directly_subscribed}}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Registered Device Count</label><br>
+                                <small>{{$item->registered_device_count}}</small>
                             </div>
 
                         </div>

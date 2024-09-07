@@ -62,6 +62,10 @@ class HomeController extends Controller
             $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_converted','true')->get()->count();
             $item->trial_converted=($gained/$total)*100;
 
+            $item->registered_device_count = Device::where('bundle_id', $item->bundle_id)
+            ->distinct('device_id')
+            ->count('device_id');
+
         }
         return view('home',$data);
     }
