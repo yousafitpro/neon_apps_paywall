@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Device;
 use App\Models\DeviceEvent;
 use App\Models\Paywall;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -41,6 +42,7 @@ class HomeController extends Controller
         ->groupBy('bundle_id')
         ->get();
         $data['total_events_count'] = DeviceEvent::query()->get()->count();
+        $data['total_users'] = User::query()->get()->count();
 
         foreach($data['list'] as $item)
         {

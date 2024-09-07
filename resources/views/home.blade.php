@@ -43,7 +43,7 @@
             <div class="mcard" style="border-radius: 10px" >
                 <div class="mcardbody">
                     <h4 style="color: white">
-                        456.456
+                        {{$total_users}}
                     </h3>
                     <label>Total Users</label>
                 </div>
