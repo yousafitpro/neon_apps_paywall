@@ -82,7 +82,7 @@ class HomeController extends Controller
         {
 
 
-            return Excel::download(new AppExport($items), 'apps.xlsx');
+            return Excel::download(new AppExport($data['list']), 'apps.xlsx');
         }
         return view('home',$data);
     }

@@ -20,14 +20,13 @@ class AppExport implements FromCollection, WithHeadings
         return $this->items->map(function($item) {
             return [
                 'bundle_id' => $item->bundle_id,
-                'device_id' => $item->device_id,
-                'idfa' => $item->idfa,
-                'device_model' => $item->device_model,
-                'is_onboarding_completed' => $item->is_onboarding_completed,
-                'is_trial_started' => $item->is_trial_started,
-                'is_directly_subscribed' => $item->is_directly_subscribed,
-                'is_trial_converted' => $item->is_trial_converted,
-                'created_at' => $item->created_at,
+                'app_id' => $item->info->app_id,
+                'onboarding' => $item->onboarding,
+                'trial_started' => $item->trial_started,
+                'directly_subscribed' => $item->directly_subscribed,
+                'trial_converted' => $item->trial_converted,
+                'registered_device_count' => $item->registered_device_count,
+                'created_at' => $item->info->created_at,
             ];
         });
     }
@@ -35,13 +34,12 @@ class AppExport implements FromCollection, WithHeadings
     {
         return [
             'Bundle ID',
-            'Device ID',
-            'IDFA',
-            'Model',
-            'Onboarding Completed',
+            'App ID',
+            'Onboarding',
             'Trial Started',
             'Directly Subscribed',
             'Trial Converted',
+            'Registered Device Count',
             'Created At',
         ];
     }
