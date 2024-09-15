@@ -165,6 +165,11 @@
         </nav>
 
         <main class="py-4">
+            @if (session('message'))
+            <script>
+             alert("{{session('message')}}")
+            </script>
+        @endif
             @yield('content')
         </main>
     </div>

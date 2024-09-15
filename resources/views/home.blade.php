@@ -62,17 +62,18 @@
     </div>
     <br>
    <div style="height: 50px;width:100%">
-    <h4 style="color: white;float:left;"><a href="{{url('home')}}"><span class="btn_back"><i class="fa-solid fa-list"></i></span></a>All Apps</h4>
-    {{-- <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
+    <div style="float: left;">
+        <h4 style="color: white;float:left;"><a href="{{url('home')}}"><span class="btn_back"><i class="fa-solid fa-list"></i></span></a>All Apps</h4>
+    <button style="margin-left: 20px" type="button" class="btn btn-info btn-sm rounded" onclick="takeAction('export')">Export</button>
+    <button style="margin-left: 5px" type="button" class="btn btn-danger btn-sm rounded" onclick="takeAction('delete')">Delete</button>
+    </div>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
+           <label style="color: white; margin-right:10px" id="selected_item_count">0 items selected</label>
+        <button id="selectAll" class="btn btn-info btn-sm rounded" style="margin-right: 10px">Select All</button>
+            <button id="cancelAll" class="btn btn-danger btn-sm rounded">Cancel</button>
 
-        <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
-          <input type="radio" name="options" id="option1" autocomplete="off" checked> Export
-        </label>
-        <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='events'?'active':''}}">
-          <input type="radio" name="options" id="option3" autocomplete="off">
-          <i class="fa-solid fa-filter"></i>
-        </label>
-      </div> --}}
+
+      </div>
    </div>
     @foreach ($list as $item)
 
@@ -87,6 +88,12 @@
                                   {{$item->info->app_name}}
                                 </h3>
 
+                            </div>
+                            <div class="col-md-6">
+                                <div style="float: right; padding:10px;">
+                                    {{-- this is for to select the item --}}
+                                    <input type="checkbox" class="select-item" value="{{ $item->id }}" style="zoom: 1.5">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -128,11 +135,56 @@
     @endforeach
 
 </div>
+<form id="downloadForm" method="POST" action="{{ url('home') }}" style="display: none;">
+    @csrf
+    <input type="hidden" name="type" id="action_type" value="records">
+    <input type="hidden" name="items" id="downloadItems">
+</form>
 <script>
     $(document).ready(function() {
+             // Select All Items
+             $('#selectAll').on('click', function() {
+            $('.select-item').prop('checked', true);
+        });
+
+        // Cancel All Items
+        $('#cancelAll').on('click', function() {
+            $('.select-item').prop('checked', false);
+        });
+
+        // Handle Submit Selected Items
+
         $('#yourDataTable').DataTable({
             order:[]
         }); // Replace 'yourDataTable' with the actual ID of your table
     });
+    function takeAction(action_type) {
+        $('#action_type').val(action_type);
+    let selectedItems = [];
+    $('.select-item:checked').each(function() {
+        selectedItems.push($(this).val());
+    });
+
+    if (selectedItems.length > 0) {
+
+            if(confirm("Are you sure you want to "+action_type+"?"))
+            {
+                $('#downloadItems').val(JSON.stringify(selectedItems));
+
+            $('#downloadForm').attr('action', "{{ url('home') }}");
+            $('#downloadForm').submit();
+            }
+
+    } else {
+        alert('Please select at least one item');
+    }
+}
+$('.select-item').on('change', function() {
+            updateSelectedCount();
+        });
+function updateSelectedCount() {
+            var selectedCount = $('.select-item:checked').length;
+            $('#selected_item_count').text(selectedCount + ' items selected');
+        }
 </script>
 @endsection

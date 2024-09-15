@@ -29,7 +29,7 @@ Route::get('/', function () {
 //adsdasd
  Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::any('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::any('/items/{bundle_id}', [App\Http\Controllers\HomeController::class, 'items'])->name('devices');
 Route::get('/events/{bundle_id}', [App\Http\Controllers\HomeController::class, 'events'])->name('events');
 Route::get('/apps/{id}', [App\Http\Controllers\HomeController::class, 'apps'])->name('apps');

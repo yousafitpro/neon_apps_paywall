@@ -35,7 +35,7 @@ class DeviceController extends Controller
        }
        $data=$request->except('_token');
        Device::create($data);
-       return response()->json(['status'=>'success','message'=>'Record Created'],201);
+       return redirect()->back()->with(['status'=>'success','message'=>'Record Created']);
     }
     public function update(Request $request)
     {

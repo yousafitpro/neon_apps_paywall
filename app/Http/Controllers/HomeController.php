@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AppExport;
 use App\Models\Device;
 use App\Models\DeviceEvent;
 use App\Models\Paywall;
@@ -33,7 +34,7 @@ class HomeController extends Controller
            Paywall::where('id',$id)->delete();
            return back()->with(['message'=>"Successfully deleted"]);
     }
-    public function index()
+    public function index(Request $request)
     {
 
         $data['total_devices'] = Device::distinct('device_id')
@@ -68,6 +69,20 @@ class HomeController extends Controller
             ->distinct('device_id')
             ->count('device_id');
 
+        }
+
+
+        if($request->has(key: 'type') && $request->type=='delete')
+        {
+
+            Device::destroy(json_decode($request->items,true));
+            return redirect()->back()->with(['status'=>'success','message'=>'Records successfully deleted']);
+        }
+        if($request->has('type') && $request->type=='export')
+        {
+
+
+            return Excel::download(new AppExport($items), 'apps.xlsx');
         }
         return view('home',$data);
     }
@@ -145,6 +160,7 @@ class HomeController extends Controller
             $item->trial_converted=($gained/$total)*100;
 
         }
+
         if($request->has('form_type') && $request->form_type=='export')
         {
             return Excel::download(new DeviceExport($data['devices']), 'devices.xlsx');
