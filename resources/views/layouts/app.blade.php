@@ -24,6 +24,51 @@
     {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
 
     <style>
+        .dark-modal {
+    background-color: #343a40; /* Dark background */
+    color: #ffffff; /* Light text */
+    border: none;
+}
+
+.dark-modal .modal-header {
+    border-bottom: 1px solid #444;
+}
+
+.dark-modal .modal-footer {
+    border-top: 1px solid #444;
+}
+
+.dark-modal .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.dark-modal .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.dark-modal .close span {
+    color: #ffffff;
+}
+.dark-input {
+    background-color: #343a40; /* Dark background */
+    color: #ffffff; /* Light text */
+    border: 1px solid #444; /* Border color */
+}
+
+.dark-input:focus {
+    background-color: #495057; /* Darker background on focus */
+    color: #ffffff;
+    border-color: #007bff; /* Blue border on focus */
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Light blue shadow on focus */
+}
+
+/* Placeholder text color */
+.dark-input::placeholder {
+    color: #cccccc;
+}
             .btn_back{
         color: white !important;
         font-size: 14px;
@@ -69,11 +114,14 @@
     .mcard small{
         color: white
     }
+    .navbar-nav li a{
+        color: white
+    }
         </style>
 </head>
 <body class="bg-black" style="background-color: black">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                    Data Platform

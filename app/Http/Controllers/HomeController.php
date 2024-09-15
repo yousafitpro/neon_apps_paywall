@@ -8,7 +8,9 @@ use App\Models\Paywall;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Session;
+use App\Exports\DeviceExport;
+use Maatwebsite\Excel\Facades\Excel;
 class HomeController extends Controller
 {
     /**
@@ -69,14 +71,58 @@ class HomeController extends Controller
         }
         return view('home',$data);
     }
-    public function items($bundle_id)
+    public function items(Request $request,$bundle_id)
     {
 
 
+        Session::put('is_trialt_converted',$request->has('is_trialt_converted')?'true':'false');
+        Session::put('is_directly_subscribed',$request->has('is_directly_subscribed')?'true':'false');
+        Session::put('is_onboarding_complete',$request->has('is_onboarding_complete')?'true':'false');
+        Session::put('is_trialt_start',$request->has('is_trialt_start')?'true':'false');
+        Session::put('device_model',$request->has('device_model')?$request->device_model:'false');
+        Session::put('year',$request->has('year')?$request->year:'false');
+        Session::put('year_start',$request->has('year_start')?$request->year_start:'false');
+        Session::put('year_end',$request->has('year_end')?$request->year_end:'false');
+
+        $is_trialt_converted=Session::get('is_trialt_converted');
+        $is_directly_subscribed=Session::get('is_directly_subscribed');
+        $is_onboarding_complete=Session::get('is_onboarding_complete');
+        $is_trialt_start=Session::get('is_trialt_start');
+        $device_model=Session::get('device_model');
+        $year=Session::get('year');
+        $year_start=Session::get('year_start');
+        $year_end=Session::get('year_end');
+// dd($is_onboarding_complete,$is_trialt_start,$is_directly_subscribed,$is_trialt_converted);
+        $data['device_models'] = Device::select('device_model')->where('bundle_id',$bundle_id)->distinct()->get();
         $data['list'] = Device::where('bundle_id',$bundle_id)
         ->take(1)->get();
         $data['devices'] = Device::where('bundle_id',$bundle_id)
+        ->when(($is_onboarding_complete!='false'), function ($query) use ($is_onboarding_complete) {
+            $query->where('is_onboarding_completed',$is_onboarding_complete);
+        })
+        ->when(($is_trialt_start!='false'), function ($query) use ($is_trialt_start) {
+            $query->where('is_trial_started',$is_trialt_start);
+        })
+        ->when(($is_directly_subscribed!='false'), function ($query) use ($is_directly_subscribed) {
+            $query->where('is_directly_subscribed',$is_directly_subscribed);
+        })
+        ->when(($is_trialt_converted!='false'), function ($query) use ($is_trialt_converted) {
+            $query ->where('is_trial_converted',$is_trialt_converted);
+        })
+        ->when(($device_model!='false' && $device_model!=''), function ($query) use ($device_model) {
+            $query->where('device_model', $device_model);
+        })
+        ->when(($year!='false'), function ($query) use ($year) {
+            $query->whereYear('created_at', $year);
+        })
+        ->when(($year=='false' && $year_start!='false' && !empty($year_start)), function ($query) use ($year_start) {
+            $query->whereDate('created_at','>=', $year_start);
+        })
+        ->when(($year=='false' && $year_end!='false' && !empty($year_end)), function ($query) use ($year_end) {
+            $query->whereDate('created_at','<=', $year_end);
+        })
         ->get();
+
         $data['events'] = DeviceEvent::where('bundle_id',$bundle_id)
         ->get();
 
@@ -98,6 +144,10 @@ class HomeController extends Controller
             $gained=Device::where('bundle_id',$item->bundle_id)->where('is_trial_converted','true')->get()->count();
             $item->trial_converted=($gained/$total)*100;
 
+        }
+        if($request->has('form_type') && $request->form_type=='export')
+        {
+            return Excel::download(new DeviceExport($data['devices']), 'devices.xlsx');
         }
         if(request('type')=="devices")
         {

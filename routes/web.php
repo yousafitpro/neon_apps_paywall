@@ -30,7 +30,7 @@ Route::get('/', function () {
  Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/items/{bundle_id}', [App\Http\Controllers\HomeController::class, 'items'])->name('devices');
+Route::any('/items/{bundle_id}', [App\Http\Controllers\HomeController::class, 'items'])->name('devices');
 Route::get('/events/{bundle_id}', [App\Http\Controllers\HomeController::class, 'events'])->name('events');
 Route::get('/apps/{id}', [App\Http\Controllers\HomeController::class, 'apps'])->name('apps');
 Route::get('/paywalls/{api_key}/{app_id}', [App\Http\Controllers\HomeController::class, 'paywalls'])->name('paywalls');
