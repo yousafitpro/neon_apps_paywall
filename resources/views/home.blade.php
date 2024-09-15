@@ -68,9 +68,9 @@
     <button style="margin-left: 5px" type="button" class="btn btn-danger btn-sm rounded" onclick="takeAction('delete')">Delete</button>
     </div>
     <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
-           <label style="color: white; margin-right:10px" id="selected_item_count">0 items selected</label>
+           <label style="color: white; margin-right:10px;display:none" id="selected_item_count">0 items selected</label>
         <button id="selectAll" class="btn btn-info btn-sm rounded" style="margin-right: 10px">Select All</button>
-            <button id="cancelAll" class="btn btn-danger btn-sm rounded">Cancel</button>
+            <button id="cancelAll" style="display:none" class="btn btn-danger btn-sm rounded">Cancel</button>
 
 
       </div>
@@ -145,11 +145,13 @@
              // Select All Items
              $('#selectAll').on('click', function() {
             $('.select-item').prop('checked', true);
+            updateSelectedCount()
         });
 
         // Cancel All Items
         $('#cancelAll').on('click', function() {
             $('.select-item').prop('checked', false);
+            updateSelectedCount()
         });
 
         // Handle Submit Selected Items
@@ -185,6 +187,16 @@ $('.select-item').on('change', function() {
 function updateSelectedCount() {
             var selectedCount = $('.select-item:checked').length;
             $('#selected_item_count').text(selectedCount + ' items selected');
+            if(selectedCount>0)
+            {
+                $('#cancelAll').css("display",'block')
+                $('#selected_item_count').css("display",'block')
+            }else
+            {
+                $('#cancelAll').css("display",'none')
+                $('#selected_item_count').css("display",'none')
+            }
+
         }
 </script>
 @endsection
