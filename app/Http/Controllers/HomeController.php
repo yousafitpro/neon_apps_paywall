@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Exports\DeviceExport;
+use App\Exports\EventExport;
 use Maatwebsite\Excel\Facades\Excel;
 class HomeController extends Controller
 {
@@ -139,6 +140,15 @@ class HomeController extends Controller
         ->get();
 
         $data['events'] = DeviceEvent::where('bundle_id',$bundle_id)
+        ->when(($year!='false'), function ($query) use ($year) {
+            $query->whereYear('created_at', $year);
+        })
+        ->when(($year=='false' && $year_start!='false' && !empty($year_start)), function ($query) use ($year_start) {
+            $query->whereDate('created_at','>=', $year_start);
+        })
+        ->when(($year=='false' && $year_end!='false' && !empty($year_end)), function ($query) use ($year_end) {
+            $query->whereDate('created_at','<=', $year_end);
+        })
         ->get();
 
         foreach($data['list'] as $item)
@@ -161,9 +171,15 @@ class HomeController extends Controller
 
         }
 
-        if($request->has('form_type') && $request->form_type=='export')
+        if($request->has('form_type') && $request->form_type=='export' && $request->has('sub_type') && $request->sub_type=='devices')
         {
             return Excel::download(new DeviceExport($data['devices']), 'devices.xlsx');
+        }
+
+        if($request->has('form_type') && $request->form_type=='export' && $request->has('sub_type') && $request->sub_type=='events')
+        {
+
+            return Excel::download(new EventExport($data['events']), 'events.xlsx');
         }
         if(request('type')=="devices")
         {

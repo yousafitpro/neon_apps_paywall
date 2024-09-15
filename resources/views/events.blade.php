@@ -53,6 +53,56 @@
             </div>
         </div>
     </a>
+    <div class="modal " tabindex="-1" role="dialog" id="filterModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content dark-modal">
+            <div class="modal-header">
+              <h5 class="modal-title">Filters</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+           <form action="{{url('items')}}/{{request('bundle_id')}}?type={{request('type')}}" method="post" id="form_1">
+            @csrf
+            <input name="form_type" id="form_type" value="records" hidden>
+            <input name="sub_type" id="sub_type" value="events" hidden>
+            <div class="row">
+                <div class="col-md-12">
+                    <select name="year" class="form-control dark-input">
+                        <option  value="false">Select year</option>
+                        <option {{session('year')=='2024'?'selected':''}} value="2024">This Year</option>
+                        <option {{session('year')=='2023'?'selected':''}} value="2023">2023</option>
+                        <option {{session('year')=='2022'?'selected':''}} value="2022">2022</option>
+                        <option {{session('year')=='2021'?'selected':''}} value="2021">2021</option>
+                        <option {{session('year')=='2020'?'selected':''}} value="2020">2020</option>
+                    </select>
+                </div>
+              </div>
+              <h6 style="text-align: center">Or</h6>
+              <div class="row">
+                <div class="col-md-6">
+                    <input name="year_start" type="date" value="{{session('year_start')}}" class="form-control dark-input">
+                </div>
+                <div class="col-md-6">
+                    <input name="year_end" type="date" value="{{session('year_end')}}" class="form-control dark-input">
+                </div>
+              </div>
+              <hr color="lightgrey">
+
+              <br>
+              <div class="row">
+                <div class="col-md-12">
+                    <button type="button" onclick="submitForm('records')" class="btn btn-info btn-block">Apply</button>
+                </div>
+              </div>
+           </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     @endforeach
     <br>
     <div class="row justify-content-center">
@@ -76,13 +126,13 @@
                           </div>
                           <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right">
 
-                            <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
-                              <input type="radio" name="options" id="option1" autocomplete="off" checked> Export
-                            </label>
-                            <label style="cursor: pointer"  class="btn btn-secondary {{request('type')=='events'?'active':''}}">
-                              <input type="radio" name="options" id="option3" autocomplete="off">
-                              <i class="fa-solid fa-filter"></i>
-                            </label>
+                            <label onclick="submitForm('export')" style="cursor: pointer"  class="btn btn-secondary {{request('type')=='devices'?'active':''}}">
+                                <input type="radio" name="options" id="option1" autocomplete="off" checked> Export
+                              </label>
+                              <label data-target="#filterModal" data-toggle="modal" style="cursor: pointer"  class="btn btn-secondary {{request('type')=='events'?'active':''}}">
+                                <input type="radio" name="options" id="option3" autocomplete="off">
+                                <i class="fa-solid fa-filter"></i>
+                              </label>
                           </div>
                         </div>
 
@@ -121,6 +171,11 @@
     </div>
 </div>
 <script>
+        function submitForm(type)
+    {
+        $('#form_type').val(type)
+        $('#form_1').submit()
+    }
     $(document).ready(function() {
         $('#yourDataTable').DataTable({
             order:[]

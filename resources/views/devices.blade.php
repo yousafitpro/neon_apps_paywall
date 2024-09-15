@@ -66,6 +66,7 @@
            <form action="{{url('items')}}/{{request('bundle_id')}}?type={{request('type')}}" method="post" id="form_1">
             @csrf
             <input name="form_type" id="form_type" value="records" hidden>
+            <input name="sub_type" id="sub_type" value="devices" hidden>
             <div class="row">
                 <div class="col-md-12">
                     <select name="year" class="form-control dark-input">
