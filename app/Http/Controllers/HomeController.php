@@ -179,8 +179,8 @@ class HomeController extends Controller
                     'is_directly_subscribed'=>self::count_event_ratio_and_number($bundle_id,'is_directly_subscribed',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
                     'to_be_paid'=>self::count_event_ratio_and_number($bundle_id,'is_trial_converted',$startDate->toDateTimeString(),$endDate->toDateTimeString(),'!='),
                     'total_events' => $event->total_events,
-                    'start_date' => $startDate->format('j F'),
-                    'end_date' => $endDate->format('j F'),
+                    'start_date' => $startDate->format('y'),
+                    'end_date' => $endDate->format('y'),
                 ];
             });
         }

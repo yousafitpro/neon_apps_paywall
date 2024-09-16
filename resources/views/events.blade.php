@@ -220,7 +220,7 @@
                         @foreach ($group_by as $item)
                         <tr class="tbl_row">
                             <td>
-                                @if(session('group_by')!='day')
+                                @if(session('group_by')=='month')
                                 {{$item['start_date']}}/{{$item['end_date']}}
                                 @else
                                 {{$item['start_date']}}
