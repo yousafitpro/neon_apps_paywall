@@ -208,7 +208,7 @@
                             <th>Event Date</th>
                             <th> {{session('event_type')=='number'?'#':''}} Onboarding Completion {{session('event_type')=='ration'?' Rate':''}}</th>
                             <th> {{session('event_type')=='number'?'#':''}} Trial Start {{session('event_type')=='ration'?' Rate':''}}</th>
-                            <th>{{session('event_type')=='number'?'#':''}} Trial Paid {{session('event_type')=='ration'?' Rate':''}}</th>
+                            <th>{{session('event_type')=='number'?'#':''}} Trial To Paid {{session('event_type')=='ration'?' Rate':''}}</th>
                             <th> {{session('event_type')=='number'?'#':''}} Direct Subscription {{session('event_type')=='ration'?' Rate':''}}</th>
 
 
