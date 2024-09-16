@@ -7,8 +7,12 @@
 <div class="container" >
 
     @foreach ($list as $item)
-<h3 style="color: white"><a href="{{url('home')}}"><span class="btn_back"><i class="fa-solid fa-chevron-left"></i></span></a>{{$item->info->app_name}}</h3>
-    <a href="{{url('items')}}/{{$item->bundle_id}}?type=devices">
+<h3 style="color: white"><a href="{{url('home')}}"><span class="btn_back">
+    <i class="fa-solid fa-chevron-left"></i></span></a>{{$item->info->app_name}} <a href="https://apps.apple.com/us/app/photos/id{{$item->info->app_id}}" target="_blank" class="d-inline-block">
+        <button class="btn btn-success round btn-sm" style="border-radius: 15px;"><i class="fa-solid fa-link"></i> Product Link</button>
+    </a>
+</h3>
+
         <div class="row" style="cursor: pointer">
             <div class="col-md-12">
                 <div class="mcard" >
@@ -23,12 +27,13 @@
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-                                <label>Bundle ID</label><br>
-                                <small>{{$item->info->bundle_id}}</small>
+                                <label>Bundle ID</label> <i style="color: white;zoom:1.2; margin-left:5px;" class="fa-solid fa-copy copy-icon" data-clipboard-target="#bundle-id"></i>
+                                <br>
+                                <small id="bundle-id">{{$item->info->bundle_id}}</small>
                             </div>
-                            <div class="col-md-1">
-                                <label>App ID</label><br>
-                                <small>{{$item->info->app_id}}</small>
+                            <div class="col-md-2">
+                                <label>App ID</label> <i style="color: white;zoom:1.2; margin-left:5px;" class="fa-solid fa-copy copy-icon" data-clipboard-target="#app-id"></i><br>
+                                <small id="app-id">{{$item->info->app_id}}</small>
                             </div>
                             <div class="col-md-2">
                                 <label>Onboarding Completion Rate</label><br>
@@ -52,7 +57,7 @@
                 </div>
             </div>
         </div>
-    </a>
+
     <div class="modal " tabindex="-1" role="dialog" id="filterModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content dark-modal">

@@ -87,9 +87,7 @@
 
                                 <h5 style="color: white">
                                   {{$item->info->app_name}}
-                                  <a href="https://apps.apple.com/us/app/photos/id{{$item->info->app_id}}" target="_blank" class="d-inline-block">
-                                    <button class="btn btn-success round btn-sm" style="border-radius: 15px;"><i class="fa-solid fa-link"></i> Product Link</button>
-                                </a>
+
                                 </h3>
 
 

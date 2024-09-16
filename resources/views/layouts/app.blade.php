@@ -224,9 +224,25 @@
             @yield('content')
         </main>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 <script>
+
+
+
+
     $(document).ready(function() {
+        var clipboard = new ClipboardJS('.copy-icon');
+
+clipboard.on('success', function(e) {
+    // Optional: Show a message or feedback when the text is copied
+    alert('Copied to clipboard!');
+    e.clearSelection();
+});
+
+clipboard.on('error', function(e) {
+    // Optional: Show a message or feedback if there was an error
+    alert('Failed to copy.');
+});
     $('.js-example-basic-single').select2({'width':'100%'});
 });
     function redirect_me(url)
