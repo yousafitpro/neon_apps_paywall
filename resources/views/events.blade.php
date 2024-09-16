@@ -21,7 +21,7 @@
                         <div class="col-md-2 light_purple">
                             <label>Bundle ID</label> <i style="color: white;zoom:1.2; margin-left:5px;" class="fa-solid fa-copy copy-icon" data-clipboard-target="#bundle-id"></i>
                             <br>
-                            <small id="bundle-id">{{$item->info->bundle_id}}</small>
+                            <small id="bundle-id" style="font-size: 12px">{{$item->info->bundle_id}}</small>
                         </div>
                         <div class="col-md-2 light_blue">
                             <label>App ID</label> <i style="color: white;zoom:1.2; margin-left:5px;" class="fa-solid fa-copy copy-icon" data-clipboard-target="#app-id"></i><br>
