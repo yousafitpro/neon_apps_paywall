@@ -81,13 +81,12 @@ class HomeController extends Controller
         }
         if($request->has('type') && $request->type=='export')
         {
-
-
-            return Excel::download(new AppExport($data['list']), 'apps.xlsx');
+            $request->merge(['form_type'=>'export','type'=>'devices','sub_type'=>'devices']);
+            return self::items($request,json_decode($request->items,true),'home');
         }
         return view('home',$data);
     }
-    public function items(Request $request,$bundle_id)
+    public function items(Request $request,$bundle_id,$from='same')
     {
 
 
@@ -112,7 +111,13 @@ class HomeController extends Controller
         $data['device_models'] = Device::select('device_model')->where('bundle_id',$bundle_id)->distinct()->get();
         $data['list'] = Device::where('bundle_id',$bundle_id)
         ->take(1)->get();
-        $data['devices'] = Device::where('bundle_id',$bundle_id)
+        $data['devices'] = Device::query()
+        ->when($from=='same',function($query)use($bundle_id){
+            $query->where('bundle_id',$bundle_id);
+        })
+        ->when($from=='home',function($query)use($bundle_id){
+            $query->whereIn('id',$bundle_id);
+        })
         ->when(($is_onboarding_complete!='false'), function ($query) use ($is_onboarding_complete) {
             $query->where('is_onboarding_completed',$is_onboarding_complete);
         })
