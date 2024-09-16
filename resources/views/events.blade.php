@@ -120,7 +120,7 @@
                         <input type="radio" value="number" {{(session('event_type')=='number'||session('event_type')=='false')?'checked':''}}  name="event_type" id="event_number" autocomplete="off" checked> # Number Of Events
                       </label>
                       <label style="cursor: pointer"  class="btn btn-secondary {{session('event_type')=='ration'?'active':''}}">
-                        <input type="radio" value="ration" {{session('event_type')=='ration'?'checked':''}} name="event_type" id="event_ration" autocomplete="off"># Ratio Of Events
+                        <input type="radio" value="ration" {{session('event_type')=='ration'?'checked':''}} name="event_type" id="event_ration" autocomplete="off"> Ratio Of Events
                       </label>
 
                     </div>
