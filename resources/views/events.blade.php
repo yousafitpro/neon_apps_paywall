@@ -219,7 +219,13 @@
                     <tbody>
                         @foreach ($group_by as $item)
                         <tr class="tbl_row">
-                            <td>{{$item['start_date']}}/{{$item['end_date']}}</td>
+                            <td>
+                                @if(session('group_by')!='day')
+                                {{$item['start_date']}}/{{$item['end_date']}}
+                                @else
+                                {{$item['start_date']}}
+                                @endif
+                            </td>
                             <td>
                                 @if(session('event_type')=='ration')
                                 %{{$item['is_onboarding_completed']['ration']}}
