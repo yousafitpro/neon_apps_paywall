@@ -88,9 +88,46 @@
                     <input name="year_end" type="date" value="{{session('year_end')}}" class="form-control dark-input">
                 </div>
               </div>
-              <hr color="lightgrey">
-
               <br>
+              <div class="row">
+
+                <div class="col-md-12">
+                    <label>Group By</label>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%" >
+                    <label style="cursor: pointer"  class="btn btn-secondary {{(session('group_by')=='none' || session('group_by')=='false')?'active':''}}">
+                        <input type="radio"  value="none" {{(session('group_by')=='none' || session('group_by')=='false')?'checked':''}} name="group_by" id="group_none" autocomplete="off" checked> None
+                      </label>
+                      <label style="cursor: pointer"  class="btn btn-secondary {{session('group_by')=='year'?'active':''}}">
+                        <input type="radio" value="year" {{session('group_by')=='year'?'checked':''}} name="group_by" id="group_year" autocomplete="off"> Year
+                      </label>
+                      <label style="cursor: pointer"  class="btn btn-secondary {{session('group_by')=='month'?'active':''}}">
+                        <input type="radio" value="month" {{session('group_by')=='month'?'checked':''}} name="group_by" id="group_month" autocomplete="off"> Month
+                      </label>
+                      <label style="cursor: pointer"  class="btn btn-secondary {{session('group_by')=='day'?'active':''}}">
+                        <input type="radio" value="day" {{session('group_by')=='day'?'checked':''}} name="group_by" id="group_day" autocomplete="off"> Day
+                      </label>
+                    </div>
+                </div>
+
+              </div>
+              <br>
+              <div class="row">
+
+                <div class="col-md-12">
+                    <label>Search For</label>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%" >
+                    <label style="cursor: pointer"  class="btn btn-secondary {{(session('event_type')=='number'||session('event_type')=='false')?'active':''}}">
+                        <input type="radio" value="number" {{(session('event_type')=='number'||session('event_type')=='false')?'checked':''}}  name="event_type" id="event_number" autocomplete="off" checked> # Number Of Events
+                      </label>
+                      <label style="cursor: pointer"  class="btn btn-secondary {{session('event_type')=='ration'?'active':''}}">
+                        <input type="radio" value="ration" {{session('event_type')=='ration'?'checked':''}} name="event_type" id="event_ration" autocomplete="off"># Ratio Of Events
+                      </label>
+
+                    </div>
+                </div>
+
+              </div>
+<br>
               <div class="row">
                 <div class="col-md-12">
                     <button type="button" onclick="submitForm('records')" class="btn btn-info btn-block">Apply</button>
@@ -140,29 +177,83 @@
                           <br>
                           <br>
                           <table id="yourDataTable">
-                        <thead>
-                            <tr>
-                                <th>Sr</th>
-                                <th>Event Name</th>
-                                <th>Event Date</th>
+                       @if(session('group_by')=='none' || session('group_by')=='false')
+                       <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Event Name</th>
+                            <th>Event Date</th>
 
-                                <th>Device ID</th>
+                            <th>Device ID</th>
 
 
-                                <!-- Add more columns as needed -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($events as $item)
-                            <tr class="tbl_row">
-                                <td>{{$loop->iteration}}</td>
-                                <td>{{$item->event_name}}</td>
-                                <td>{{$item->created_at}}</td>
-                                <td>{{$item->device_id}}</td>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($events as $item)
+                        <tr class="tbl_row">
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$item->event_name}}</td>
+                            <td>{{$item->created_at}}</td>
+                            <td>{{$item->device_id}}</td>
 
-                            </tr>
-                            @endforeach
-                        </tbody>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    @else
+                    <thead>
+                        <tr>
+
+                            <th>Event Date</th>
+                            <th> {{session('event_type')=='number'?'#':''}} Onboarding Completion {{session('event_type')=='ration'?' Rate':''}}</th>
+                            <th> {{session('event_type')=='number'?'#':''}} Trial Start {{session('event_type')=='ration'?' Rate':''}}</th>
+                            <th>{{session('event_type')=='number'?'#':''}} Trial Paid {{session('event_type')=='ration'?' Rate':''}}</th>
+                            <th> {{session('event_type')=='number'?'#':''}} Direct Subscription {{session('event_type')=='ration'?' Rate':''}}</th>
+
+
+
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($group_by as $item)
+                        <tr class="tbl_row">
+                            <td>{{$item['start_date']}}/{{$item['end_date']}}</td>
+                            <td>
+                                @if(session('event_type')=='ration')
+                                %{{$item['is_onboarding_completed']['ration']}}
+                                @else
+                                {{$item['is_onboarding_completed']['number']}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(session('event_type')=='ration')
+                                %{{$item['is_trial_started']['ration']}}
+                                @else
+                                {{$item['is_trial_started']['number']}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(session('event_type')=='ration')
+                                %{{$item['to_be_paid']['ration']}}
+                                @else
+                                {{$item['to_be_paid']['number']}}
+                                @endif
+                            </td>
+                            <td>
+                                @if(session('event_type')=='ration')
+                               % {{$item['is_directly_subscribed']['ration']}}
+                                @else
+                                {{$item['is_directly_subscribed']['number']}}
+                                @endif
+                            </td>
+
+                        </tr>
+
+                        @endforeach
+                    </tbody>
+                       @endif
                     </table>
 
                 </div>

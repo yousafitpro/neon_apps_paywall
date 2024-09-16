@@ -98,6 +98,8 @@ class HomeController extends Controller
         Session::put('year',$request->has('year')?$request->year:'false');
         Session::put('year_start',$request->has('year_start')?$request->year_start:'false');
         Session::put('year_end',$request->has('year_end')?$request->year_end:'false');
+        Session::put('group_by',$request->has('group_by')?$request->group_by:'false');
+        Session::put('event_type',$request->has('event_type')?$request->event_type:'false');
 
         $is_trialt_converted=Session::get('is_trialt_converted');
         $is_directly_subscribed=Session::get('is_directly_subscribed');
@@ -107,6 +109,8 @@ class HomeController extends Controller
         $year=Session::get('year');
         $year_start=Session::get('year_start');
         $year_end=Session::get('year_end');
+        $event_type=Session::get('event_type');
+        $group_by=Session::get('group_by');
 // dd($is_onboarding_complete,$is_trialt_start,$is_directly_subscribed,$is_trialt_converted);
         $data['device_models'] = Device::select('device_model')->where('bundle_id',$bundle_id)->distinct()->get();
         $data['list'] = Device::where('bundle_id',$bundle_id)
@@ -155,6 +159,84 @@ class HomeController extends Controller
             $query->whereDate('created_at','<=', $year_end);
         })
         ->get();
+        $data['group_by']=[];
+        if($group_by=='year')
+        {
+            $data['group_by'] = DeviceEvent::where('bundle_id', $bundle_id)
+            ->selectRaw('YEAR(created_at) as year, COUNT(*) as total_events, MIN(created_at) as start_date, MAX(created_at) as end_date')
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->get()->map(function ($event)use($bundle_id) {
+                $year = $event->year;
+
+                // Create start and end dates for the year
+                $startDate = \Carbon\Carbon::create($year, 1, 1)->startOfYear();
+                $endDate = \Carbon\Carbon::create($year, 12, 31)->endOfYear();
+
+                return [
+                    'year' => $year,
+                    'is_onboarding_completed'=>self::count_event_ratio_and_number($bundle_id,'is_onboarding_completed',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'is_trial_started'=>self::count_event_ratio_and_number($bundle_id,'is_trial_started',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'is_directly_subscribed'=>self::count_event_ratio_and_number($bundle_id,'is_directly_subscribed',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'to_be_paid'=>self::count_event_ratio_and_number($bundle_id,'is_trial_converted',$startDate->toDateTimeString(),$endDate->toDateTimeString(),'!='),
+                    'total_events' => $event->total_events,
+                    'start_date' => $startDate->toDateTimeString(),
+                    'end_date' => $endDate->toDateTimeString(),
+                ];
+            });
+        }
+        if($group_by=='month')
+        {
+            $data['group_by'] =DeviceEvent::where('bundle_id', $bundle_id)
+            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total_events')
+            ->groupBy(DB::raw('YEAR(created_at), MONTH(created_at)'))
+            ->get()->map(function ($event)use($bundle_id) {
+                $year = $event->year;
+                $month = $event->month;
+
+                // Create start and end dates for the month
+                $startDate = \Carbon\Carbon::create($year, $month, 1)->startOfMonth();
+                $endDate = \Carbon\Carbon::create($year, $month, 1)->endOfMonth();
+
+                return [
+                    'is_onboarding_completed'=>self::count_event_ratio_and_number($bundle_id,'is_onboarding_completed',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'is_trial_started'=>self::count_event_ratio_and_number($bundle_id,'is_trial_started',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'is_directly_subscribed'=>self::count_event_ratio_and_number($bundle_id,'is_directly_subscribed',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'to_be_paid'=>self::count_event_ratio_and_number($bundle_id,'is_trial_converted',$startDate->toDateTimeString(),$endDate->toDateTimeString(),'!='),
+                    'year' => $year,
+                    'month' => $month,
+                    'total_events' => $event->total_events,
+                    'start_date' => $startDate->toDateTimeString(),
+                    'end_date' => $endDate->toDateTimeString(),
+                ];
+            });
+        }
+        if($group_by=='day')
+        {
+
+            $data['group_by'] = DeviceEvent::where('bundle_id', $bundle_id)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as total_events, MIN(created_at) as start_date, MAX(created_at) as end_date')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get()->map(function ($event)use($bundle_id) {
+                $date = $event->date;
+
+                // Create start and end dates for the day
+                $startDate = \Carbon\Carbon::parse($date)->startOfDay();
+                $endDate = \Carbon\Carbon::parse($date)->endOfDay();
+
+                return [
+                    'is_onboarding_completed'=>self::count_event_ratio_and_number($bundle_id,'is_onboarding_completed',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'is_trial_started'=>self::count_event_ratio_and_number($bundle_id,'is_trial_started',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'is_directly_subscribed'=>self::count_event_ratio_and_number($bundle_id,'is_directly_subscribed',$startDate->toDateTimeString(),$endDate->toDateTimeString()),
+                    'to_be_paid'=>self::count_event_ratio_and_number($bundle_id,'is_trial_converted',$startDate->toDateTimeString(),$endDate->toDateTimeString(),'!='),
+                    'date' => $date,
+                    'total_events' => $event->total_events,
+                    'start_date' => $startDate->toDateTimeString(),
+                    'end_date' => $endDate->toDateTimeString(),
+                ];
+            });
+        }
+
+
 
         foreach($data['list'] as $item)
         {
@@ -195,6 +277,17 @@ class HomeController extends Controller
         {
             return view('events',$data);
         }
+    }
+
+    public function count_event_ratio_and_number($bundle_id,$event_name,$start_date,$end_date,$expresion='=')
+    {
+        $total=Device::where('bundle_id',$bundle_id)->get()->count();
+        $gained=Device::where('bundle_id',$bundle_id)->where($event_name,$expresion,'true')
+        ->whereDate('created_at','>=',$start_date)
+        ->whereDate('created_at','<=',$end_date)
+        ->get()->count();
+        $ratio=($gained/$total)*100;
+        return ['ration'=>$ratio,'number'=>$gained];
     }
     public function events($bundle_id)
     {
