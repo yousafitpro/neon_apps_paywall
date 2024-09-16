@@ -91,7 +91,8 @@
               <hr color="lightgrey">
               <div class="row">
                 <div class="col-md-12">
-                    <select name="device_model" class="form-control dark-input">
+                    <label>Select Models</label>
+                    <select name="device_model[]"  class="form-control dark-input js-example-basic-single" multiple>
                         <option value="">All Models</option>
                         @foreach ($device_models as $model )
                         <option {{session('device_model')==$model->device_model?'selected':''}} value="{{$model->device_model}}">{{$model->device_model}}</option>

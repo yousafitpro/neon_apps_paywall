@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -22,7 +23,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Scripts -->
     {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <style>
         .dark-modal {
     background-color: #343a40; /* Dark background */
@@ -117,6 +119,55 @@
     .navbar-nav li a{
         color: white
     }
+    .select2-container--default .select2-selection--single {
+    background-color: #333; /* Dark background */
+    color: #fff; /* White text */
+    border: 1px solid #444; /* Slightly lighter border */
+}
+
+/* Main select container */
+.select2-container--default .select2-selection--multiple {
+    background-color: #333 !important; /* Dark background for the select box */
+    color: #fff !important; /* White text */
+    border: 1px solid #444 !important; /* Dark border */
+}
+
+/* Selected items in the select box */
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    color: #fff !important; /* White text */
+    background-color: #333 !important; /* Dark background */
+}
+
+/* Search field */
+.select2-container--default .select2-search--inline .select2-search__field {
+    background-color: #333 !important; /* Dark background */
+    color: #fff !important; /* White text */
+    border: 1px solid #444 !important; /* Dark border */
+}
+
+/* Arrow and clear button */
+.select2-container--default .select2-selection--multiple .select2-selection__arrow,
+.select2-container--default .select2-selection--multiple .select2-selection__clear {
+    background: #444 !important; /* Darker background */
+}
+
+/* Dropdown styling */
+.select2-container--default .select2-dropdown {
+    background-color: #333 !important; /* Dark background */
+    border: 1px solid #444 !important; /* Dark border */
+}
+
+/* Options in the dropdown */
+.select2-container--default .select2-results__option {
+    background-color: #333 !important; /* Dark background */
+    color: #fff !important; /* White text */
+}
+
+/* Highlighted option */
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #555 !important; /* Highlighted background */
+    color: #fff !important; /* White text */
+}
         </style>
 </head>
 <body class="bg-black" style="background-color: black">
@@ -175,6 +226,9 @@
     </div>
 
 <script>
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2({'width':'100%'});
+});
     function redirect_me(url)
     {
         window.location.href=url;

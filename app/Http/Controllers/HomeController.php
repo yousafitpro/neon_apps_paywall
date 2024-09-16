@@ -135,7 +135,7 @@ class HomeController extends Controller
             $query ->where('is_trial_converted',$is_trialt_converted);
         })
         ->when(($device_model!='false' && $device_model!=''), function ($query) use ($device_model) {
-            $query->where('device_model', $device_model);
+            $query->whereIn('device_model', $device_model);
         })
         ->when(($year!='false'), function ($query) use ($year) {
             $query->whereYear('created_at', $year);
