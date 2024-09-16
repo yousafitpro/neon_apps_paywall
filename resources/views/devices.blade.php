@@ -17,37 +17,30 @@
             <div class="col-md-12">
                 <div class="mcard" >
                     <div class="mcardbody">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5 style="color: white">
 
-                                </h3>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
+                        <div class="row mytop">
+                            <div class="col-md-2 light_purple">
                                 <label>Bundle ID</label> <i style="color: white;zoom:1.2; margin-left:5px;" class="fa-solid fa-copy copy-icon" data-clipboard-target="#bundle-id"></i>
                                 <br>
                                 <small id="bundle-id">{{$item->info->bundle_id}}</small>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 light_blue">
                                 <label>App ID</label> <i style="color: white;zoom:1.2; margin-left:5px;" class="fa-solid fa-copy copy-icon" data-clipboard-target="#app-id"></i><br>
                                 <small id="app-id">{{$item->info->app_id}}</small>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 light_red">
                                 <label>Onboarding Completion Rate</label><br>
                                 <small>%{{$item->onboarding}}</small>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 light_blue">
                                 <label>Trial Start Rate</label><br>
                                 <small>%{{$item->trial_started}}</small>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 light_blue">
                                 <label>Trial Converted</label><br>
                                 <small>%{{$item->trial_converted}}</small>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 light_blue">
                                 <label>Direct Subscription Rate</label><br>
                                 <small>%{{$item->directly_subscribed}}</small>
                             </div>

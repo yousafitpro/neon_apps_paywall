@@ -26,6 +26,20 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <style>
+        .mcardbody{
+            padding-left:20px;
+            padding-top:10px;
+            padding-bottom:10px;
+        }
+        .mytop .light_blue{
+            border-left: solid 2px lightblue;
+        }
+        .mytop .light_red{
+            border-left: solid 2px rgb(139, 73, 73);
+        }
+        .mytop .light_purple{
+            border-left: solid 2px purple;
+        }
         .dark-modal {
     background-color: #343a40; /* Dark background */
     color: #ffffff; /* Light text */
