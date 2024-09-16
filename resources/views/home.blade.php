@@ -77,16 +77,21 @@
    </div>
     @foreach ($list as $item)
 
-    <a href="{{url('items')}}/{{$item->bundle_id}}?type=devices">
+
         <div class="row" style="cursor: pointer">
             <div class="col-md-12">
                 <div class="mcard" >
                     <div class="mcardbody">
                         <div class="row">
                             <div class="col-md-6">
+
                                 <h5 style="color: white">
                                   {{$item->info->app_name}}
+                                  <a class="badge badge-success" href="https://apps.apple.com/us/app/photos/id{{$item->info->app_id}}" target="_blank">
+                                    Product Link
+                                        </a>
                                 </h3>
+
 
                             </div>
                             <div class="col-md-6">
@@ -96,6 +101,7 @@
                                 </div>
                             </div>
                         </div>
+                        <a href="{{url('items')}}/{{$item->bundle_id}}?type=devices">
                         <div class="row">
                             <div class="col-md-2">
                                 <label>Bundle ID</label><br>
@@ -127,11 +133,12 @@
                             </div>
 
                         </div>
+                    </a>
                     </div>
                 </div>
             </div>
         </div>
-    </a>
+
     @endforeach
 
 </div>
