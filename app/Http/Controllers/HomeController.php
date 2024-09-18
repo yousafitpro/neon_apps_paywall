@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Exports\DeviceExport;
 use App\Exports\EventExport;
+use App\Exports\EventV2Export;
 use Maatwebsite\Excel\Facades\Excel;
 class HomeController extends Controller
 {
@@ -111,6 +112,8 @@ class HomeController extends Controller
         $year_end=Session::get('year_end');
         $event_type=Session::get('event_type');
         $group_by=Session::get('group_by');
+        $data['s_event_type']=$event_type;
+        $data['s_group_by']=$group_by;
 // dd($is_onboarding_complete,$is_trialt_start,$is_directly_subscribed,$is_trialt_converted);
         $data['device_models'] = Device::select('device_model')->where('bundle_id',$bundle_id)->distinct()->get();
         $data['list'] = Device::where('bundle_id',$bundle_id)
@@ -210,6 +213,31 @@ class HomeController extends Controller
                 ];
             });
         }
+        if($group_by == 'week') {
+            $data['group_by'] = DeviceEvent::where('bundle_id', $bundle_id)
+                ->selectRaw('YEAR(created_at) as year, WEEK(created_at, 1) as week, COUNT(*) as total_events')
+                ->groupBy(DB::raw('YEAR(created_at), WEEK(created_at, 1)'))
+                ->get()->map(function ($event) use ($bundle_id) {
+                    $year = $event->year;
+                    $week = $event->week;
+
+                    // Create start and end dates for the week
+                    $startDate = \Carbon\Carbon::now()->setISODate($year, $week)->startOfWeek();
+                    $endDate = \Carbon\Carbon::now()->setISODate($year, $week)->endOfWeek();
+
+                    return [
+                        'is_onboarding_completed' => self::count_event_ratio_and_number($bundle_id, 'is_onboarding_completed', $startDate->toDateTimeString(), $endDate->toDateTimeString()),
+                        'is_trial_started' => self::count_event_ratio_and_number($bundle_id, 'is_trial_started', $startDate->toDateTimeString(), $endDate->toDateTimeString()),
+                        'is_directly_subscribed' => self::count_event_ratio_and_number($bundle_id, 'is_directly_subscribed', $startDate->toDateTimeString(), $endDate->toDateTimeString()),
+                        'to_be_paid' => self::count_event_ratio_and_number($bundle_id, 'is_trial_converted', $startDate->toDateTimeString(), $endDate->toDateTimeString(), '!='),
+                        'year' => $year,
+                        'week' => $week,
+                        'total_events' => $event->total_events,
+                        'start_date' => $startDate->format('j F'),
+                        'end_date' => $endDate->format('j F'),
+                    ];
+                });
+        }
         if($group_by=='day')
         {
 
@@ -263,6 +291,11 @@ class HomeController extends Controller
             return Excel::download(new DeviceExport($data['devices']), 'devices.xlsx');
         }
 
+        if($request->has('form_type') && $request->form_type=='export' && $request->has('sub_type') && $request->sub_type=='events' && (session('group_by')!='none' && session('group_by')!='false'))
+        {
+
+            return Excel::download(new EventV2Export($data), 'events.xlsx');
+        }
         if($request->has('form_type') && $request->form_type=='export' && $request->has('sub_type') && $request->sub_type=='events')
         {
 

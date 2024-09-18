@@ -99,6 +99,9 @@
                       <label style="cursor: pointer"  class="btn btn-secondary {{session('group_by')=='month'?'active':''}}">
                         <input type="radio" value="month" {{session('group_by')=='month'?'checked':''}} name="group_by" id="group_month" autocomplete="off"> Month
                       </label>
+                       <label style="cursor: pointer"  class="btn btn-secondary {{session('group_by')=='week'?'active':''}}">
+                        <input type="radio" value="week" {{session('group_by')=='week'?'checked':''}} name="group_by" id="group_week" autocomplete="off"> Week
+                      </label>
                       <label style="cursor: pointer"  class="btn btn-secondary {{session('group_by')=='day'?'active':''}}">
                         <input type="radio" value="day" {{session('group_by')=='day'?'checked':''}} name="group_by" id="group_day" autocomplete="off"> Day
                       </label>
@@ -216,7 +219,7 @@
                         @foreach ($group_by as $item)
                         <tr class="tbl_row">
                             <td>
-                                @if(session('group_by')=='month')
+                                @if(session('group_by')=='month' || session('group_by')=='week')
                                 {{$item['start_date']}}/{{$item['end_date']}}
                                 @else
                                 {{$item['start_date']}}
