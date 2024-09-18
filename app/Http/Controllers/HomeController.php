@@ -123,7 +123,8 @@ class HomeController extends Controller
             $query->where('bundle_id',$bundle_id);
         })
         ->when($from=='home',function($query)use($bundle_id){
-            $query->whereIn('id',$bundle_id);
+            $bundles=Device::query()->whereIn('id',$bundle_id)->get('bundle_id')->toArray();
+            $query->whereIn('bundle_id',$bundles);
         })
         ->when(($is_onboarding_complete!='false'), function ($query) use ($is_onboarding_complete) {
             $query->where('is_onboarding_completed',$is_onboarding_complete);
